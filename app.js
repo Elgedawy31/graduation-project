@@ -25,7 +25,7 @@ mongoose
 
 app.use("/products", ProductRouter);
 app.use("/contact", ContactRouter);
-app.use("/book", BookRouter);
+app.use("/books", BookRouter);
 app.use("/orders", OrderRouter);
 app.use("/chef", ChefRouter);
 app.use("/blog", BlogRouter);

@@ -1,8 +1,8 @@
-const { BlogModal } = require("../models/blog.model");
+const { BookModel } = require("../models/book.model");
 
 const CreateBook = async (req, res, next) => {
   try {
-    const savedBook = new BlogModal(req.body);
+    const savedBook = new BookModel(req.body);
 
     const SavedPro = await savedBook.save();
 
