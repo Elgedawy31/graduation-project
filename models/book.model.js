@@ -24,7 +24,6 @@ const BookShcema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
     },
   },
   {
