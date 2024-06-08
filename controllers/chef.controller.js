@@ -43,5 +43,16 @@ const getChef = async (req, res, next) => {
     res.status(500).json(error);
   }
 };
+const removeChef = async (req, res, next) => {
+  try {
+    const { params } = req;
 
-module.exports = { CreateChef, getChefs, getChef };
+    const Chefs = await ChefModel.findOneAndDelete({ _id: params.id });
+
+    res.status(200).json(Chefs);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+module.exports = { CreateChef, getChefs, getChef ,removeChef };
