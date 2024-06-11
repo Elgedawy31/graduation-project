@@ -39,7 +39,7 @@ const getOrders = async (req, res) => {
     query.price ? (search.price = query.price) : null;
     query.type ? (search.type = query.type) : null;
 
-    const order = await OrderModel.findOne(search).populate({
+    const order = await OrderModel.find(search).populate({
       path: "productID",
       select: "-description -productLocation",
     });
