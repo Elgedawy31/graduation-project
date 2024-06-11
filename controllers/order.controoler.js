@@ -1,5 +1,6 @@
+const { default: Stripe } = require("stripe");
 const { OrderModel } = require("../models/order.model");
-
+const stripe = require('stripe')(  "sk_test_51NE9ReJO7nATFrqGbshK1OQDsJ9r8fPzRRoVyClCtVWUHP3Uj5zpx3qkuODeRoIGUxSNEPosd8FawRlITL7lUZHY00KMqPrVNU")
 const CreateOrder = async (req, res, next) => {
   const { quantity, total, subTotal } = req.body;
   try {
@@ -49,5 +50,33 @@ const getOrders = async (req, res) => {
     res.staus(500).json(error);
   }
 };
+const checkout = async (req, res) => {
+  
+  const { products } = req.body;
+  const lineItems = products.map((ele) => ({
+    price_data:{
+      currency:'usd' ,
+      product_Data:{
+        name:ele?.productID?.title ,
+        images:[ele?.productID?.imageUrl],
 
-module.exports = { getOrder, CreateOrder, getOrders };
+      },
+      unit_amount:Math.round(ele?.productID?.price * 100)
+    },
+    quantity:ele?.productID?.quantity
+  }));
+
+  const sesstion = await stripe.checkout.sesstion.create({
+    payment_method_types:["Card"],
+    line_items:lineItems ,
+    mode:'payment',
+    success_url:'/orders' ,
+    cancel_url:'' ,
+  })
+
+
+  res.send({id:sesstion?.id})
+
+};
+
+module.exports = { getOrder, CreateOrder, getOrders, checkout };
