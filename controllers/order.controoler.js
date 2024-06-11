@@ -33,6 +33,18 @@ const getOrder = async (req, res) => {
     res.staus(500).json(error);
   }
 };
+const deleteOrder = async (req, res) => {
+  try {
+    const order = await OrderModel.findByIdAndDelete(req.params.id).populate({
+      path: "productID",
+      select: "-description -productLocation",
+    });
+
+    res.status(200).json('done deleted');
+  } catch (error) {
+    res.staus(500).json(error);
+  }
+};
 const getOrders = async (req, res) => {
   try {
     const { query } = req;
@@ -77,4 +89,4 @@ const checkout = async (req, res) => {
   res.send({ id: session?.id });
 };
 
-module.exports = { getOrder, CreateOrder, getOrders, checkout };
+module.exports = { getOrder, CreateOrder, getOrders, checkout ,deleteOrder };
