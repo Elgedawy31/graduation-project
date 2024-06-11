@@ -1,6 +1,8 @@
 const { default: Stripe } = require("stripe");
 const { OrderModel } = require("../models/order.model");
-const stripe = require('stripe')(  "sk_test_51NE9ReJO7nATFrqGbshK1OQDsJ9r8fPzRRoVyClCtVWUHP3Uj5zpx3qkuODeRoIGUxSNEPosd8FawRlITL7lUZHY00KMqPrVNU")
+const stripe = require("stripe")(
+  "sk_test_51NE9ReJO7nATFrqGbshK1OQDsJ9r8fPzRRoVyClCtVWUHP3Uj5zpx3qkuODeRoIGUxSNEPosd8FawRlITL7lUZHY00KMqPrVNU"
+);
 const CreateOrder = async (req, res, next) => {
   const { quantity, total, subTotal } = req.body;
   try {
@@ -51,32 +53,28 @@ const getOrders = async (req, res) => {
   }
 };
 const checkout = async (req, res) => {
-  
   const { products } = req.body;
   const lineItems = products.map((ele) => ({
-    price_data:{
-      currency:'usd' ,
-      product_Data:{
-        name:ele?.productID?.title ,
-        images:[ele?.productID?.imageUrl],
-
+    price_data: {
+      currency: "usd",
+      product_data: {
+        name: ele?.productID?.title,
+        images:[ele?.productID?.imageUrl]
       },
-      unit_amount:Math.round(ele?.productID?.price * 100)
+      unit_amount: Math.round(ele?.productID?.price * 100),
     },
-    quantity:ele?.productID?.quantity
+    quantity: 1,
   }));
 
-  const sesstion = await stripe.checkout.sesstion.create({
-    payment_method_types:["Card"],
-    line_items:lineItems ,
-    mode:'payment',
-    success_url:'/orders' ,
-    cancel_url:'' ,
-  })
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items:lineItems,
+    mode: "payment",
+    success_url: "http://localhost:3001/order",
+    cancel_url: "http://localhost:3001",
+  });
 
-
-  res.send({id:sesstion?.id})
-
+  res.send({ id: session?.id });
 };
 
 module.exports = { getOrder, CreateOrder, getOrders, checkout };

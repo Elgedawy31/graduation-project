@@ -6,9 +6,9 @@ const {
   checkout
 } = require("../controllers/order.controoler");
 
+router.post("/checkout", checkout);
 router.post("/:productID", CreateOrder);
 router.get("/:id", getOrder);
 router.get("/", getOrders);
-router.post("/checkout", checkout);
 
 module.exports = router;
